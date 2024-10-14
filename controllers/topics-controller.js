@@ -7,5 +7,4 @@ function getAllTopics(request,response){
     })  
 }
 
-
 module.exports = {getAllTopics}

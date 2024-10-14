@@ -7,8 +7,6 @@ app.get("/api/topics",getAllTopics)
 
 
 
-
-
 app.use("/*", (request, response)=>{
     response.status(404).send({msg: "Route not found!"})
 })
