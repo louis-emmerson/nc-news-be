@@ -1,7 +1,6 @@
 # Northcoders News API
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
-
+Please create two .env files with PGDATABASE='name_of_you_db' for both your test and dev databases. The values of PGDATABASE must match your DB names. An example of this can be seen in .env-example
 
 
 --- 
