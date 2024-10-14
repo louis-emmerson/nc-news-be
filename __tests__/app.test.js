@@ -50,3 +50,36 @@ describe("GET /api",()=>{
         })
     })
 })
+
+describe("GET /api/articles/:article_id",()=>{
+    it("should return an object article with the ID passed",()=>{
+        return request(app)
+        .get("/api/articles/1")
+        .expect(200)
+        .then(({body})=>{
+            expect(typeof body.article).toBe("object")
+            expect(typeof body.article.author).toBe("string")
+            expect(typeof body.article.title).toBe("string")
+            expect(typeof body.article.article_id).toBe("number")
+            expect(typeof body.article.body).toBe("string")
+            expect(typeof body.article.topic).toBe("string")
+            expect(typeof body.article.created_at).toBe("string")
+            expect(typeof body.article.votes).toBe("number")
+            expect(typeof body.article.article_img_url).toBe("string")
+        })
+    })
+    it("returns error when invaild id format is used",()=>{
+        return request(app)
+        .get("/api/articles/this-is-not-a-valid-id")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("returns error when there is no article with that id",()=>{return request(app)
+        .get("/api/articles/9999999")
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("No article found with that id")
+        })})
+})
