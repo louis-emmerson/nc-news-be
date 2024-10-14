@@ -10,4 +10,4 @@ function getAllEndpoints(request,response,next){
     })
 }
 
-module.exports = getAllEndpoints
+module.exports = {getAllEndpoints}
