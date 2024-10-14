@@ -5,7 +5,7 @@ const data = require("../db/data/test-data")
 const seed = require("../db/seeds/seed")
 
 
-beforeAll(()=>{
+beforeEach(()=>{
     return seed(data)
 })
 
@@ -34,6 +34,19 @@ describe("GET /api/topics",()=>{
                 expect(typeof topic.slug).toBe("string")
                 expect(typeof topic.description).toBe("string")
             });
+        })
+    })
+})
+
+describe("GET /api",()=>{
+    it("should return a json with the endpoints available",()=>{
+        return request(app)
+        .get("/api")
+        .expect(200)
+        .then(({body})=>{
+            expect(typeof body.endpoints).toBe("object")
+            expect(typeof body.endpoints["GET /api"]).toBe("object")
+            expect(typeof body.endpoints["GET /api"].description).toBe("string")
         })
     })
 })
