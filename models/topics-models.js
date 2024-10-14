@@ -7,4 +7,5 @@ function fetchAllTopics(){
     })
 }
 
+
 module.exports = {fetchAllTopics}
