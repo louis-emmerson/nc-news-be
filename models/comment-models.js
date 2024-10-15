@@ -18,8 +18,6 @@ function fetchCommentsByArticleID(article_id){
             .then(({rows})=>{
                return rows
             })
-            .catch((err)=>{
-            })
 }
 
 function addNewComment({username, body}, article_id){
