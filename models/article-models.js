@@ -20,4 +20,10 @@ function fetchAllArticles(){
     })
 }
 
-module.exports = {fetchArticlesByID, fetchAllArticles}
+function updateArticleByID(article_id,updateObject){
+    return db.query(`UPDATE articles
+        SET votes = votes + $1
+        WHERE article_id = $2`,[updateObject.inc_votes,article_id])
+}
+
+module.exports = {fetchArticlesByID, fetchAllArticles, updateArticleByID}
