@@ -16,11 +16,9 @@ function fetchCommentsByArticleID(article_id){
                      WHERE article_id = $1
                      ORDER BY created_at DESC`,[article_id])
             .then(({rows})=>{
-               console.log(rows)
                return rows
             })
             .catch((err)=>{
-                console.log(err)
             })
 }
 
