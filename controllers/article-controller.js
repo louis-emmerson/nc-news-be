@@ -26,7 +26,6 @@ function getArticles(request, response, next){
        })
     )
     .then((articles)=>{
-        console.log(articles)
         response.status(200).send({articles:articles})
     })
   })
