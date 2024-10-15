@@ -128,3 +128,57 @@ describe("GET /api/articles",()=>{
         })
     })
 })
+
+describe("GET /api/articles/:article_id/comments",()=>{
+    it("should respond with an array of comment objects with the matching article id",()=>{
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({body})=>{
+            expect(body.comments.length).not.toBe(0)
+            body.comments.forEach((comment)=>{
+                expect(typeof comment.comment_id).toBe("number")
+                expect(typeof comment.votes).toBe("number")
+                expect(typeof comment.created_at).toBe("string")
+                expect(typeof comment.author).toBe("string")
+                expect(typeof comment.body).toBe("string")
+                expect(typeof comment.article_id).toBe("number")
+            })
+
+            expect(body.comments).toEqual(expect.arrayContaining([{
+                comment_id: 2,
+                body: 'The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.',
+                votes: 14,
+                author: 'butter_bridge',
+                article_id: 1,
+                created_at: '2020-10-31T03:03:00.000Z'
+              }]))
+        })
+    })
+    it("should return the most recent comments first in DESC order",()=>{
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({body})=>{
+            expect(body.comments).toBeSortedBy("created_at", {descending: true})
+            
+    })
+    })
+    it("should return a 400 error when given an invalid article id format", ()=>{
+        return request(app)
+        .get("/api/articles/NOT-A-VALID-ID/comments")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+            
+    })
+    })
+    it("should return a 404 article not found when given an invalid article id", ()=>{
+        return request(app)
+        .get("/api/articles/99999/comments")
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("No article found with that id")
+    })
+    })
+})
