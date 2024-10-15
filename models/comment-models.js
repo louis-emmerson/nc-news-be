@@ -22,4 +22,14 @@ function fetchCommentsByArticleID(article_id){
             })
 }
 
-module.exports = {getCommentCountByID,fetchCommentsByArticleID}
+function addNewComment({username, body}, article_id){
+   const date = new Date();
+   
+   return db.query(`INSERT INTO comments(votes, created_at, author, body, article_id) VALUES( $1, $2, $3, $4, $5)
+      RETURNING *`,[0, date, username, body, Number(article_id)])
+   .then((result)=>{
+      return result
+   })
+}
+
+module.exports = {getCommentCountByID,fetchCommentsByArticleID, addNewComment}

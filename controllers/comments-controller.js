@@ -1,5 +1,5 @@
 const { fetchArticlesByID } = require("../models/article-models")
-const { fetchCommentsByArticleID } = require("../models/comment-models")
+const { fetchCommentsByArticleID, addNewComment } = require("../models/comment-models")
 
 function getCommentsByArticleID(request, response,next){
     const {article_id} = request.params
@@ -14,4 +14,14 @@ function getCommentsByArticleID(request, response,next){
     })
 }
 
-module.exports = {getCommentsByArticleID}
+function postNewComment(request,response,next){
+    addNewComment(request.body, request.params.article_id)
+    .then(({rows})=>{
+        response.status(201).send({comment:rows[0]})
+    })
+    .catch((err)=>{
+        next(err)
+    })
+}
+
+module.exports = {getCommentsByArticleID, postNewComment}

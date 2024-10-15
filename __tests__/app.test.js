@@ -182,3 +182,66 @@ describe("GET /api/articles/:article_id/comments",()=>{
     })
     })
 })
+
+describe("POST /api/articles/:article_id/comments",()=>{
+    it("should respond with 201 and the newly created comment object",()=>{
+        return request(app)
+        .post("/api/articles/1/comments")
+        .send({
+            username: "lurker",
+            body:"Wow this test adds a new comment!"
+        })
+        .expect(201)
+        .then(({body})=>{
+            const {comment} = body
+            expect(typeof comment.comment_id).toBe("number")
+            expect(typeof comment.votes).toBe("number")
+            expect(typeof comment.created_at).toBe("string")
+            expect(typeof comment.author).toBe("string")
+            expect(typeof comment.body).toBe("string")
+            expect(typeof comment.article_id).toBe("number")
+
+            expect(body.comment.votes).toBe(0)
+            expect(body.comment.author).toBe("lurker")
+            expect(body.comment.body).toBe("Wow this test adds a new comment!")
+            expect(body.comment.article_id).toBe(1)
+        })
+        
+    })
+    it("should respond with a 404 if the username is not found",()=>{
+        return request(app)
+        .post("/api/articles/1/comments")
+        .send({
+            username: "louis",
+            body:"Wow this test adds a new comment!"
+        })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("should respond with a 404 if the article is not found",()=>{
+        return request(app)
+        .post("/api/articles/99999/comments")
+        .send({
+            username: "lurker",
+            body:"Wow this test adds a new comment!"
+        })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("should respond with a 404 if the send comment doesnt have the correct properties",()=>{
+        return request(app)
+        .post("/api/articles/1/comments")
+        .send({
+            NotACorrectUsername: "lurker",
+            NotACorrectBody:"Wow this test adds a new comment!"
+        })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+})
