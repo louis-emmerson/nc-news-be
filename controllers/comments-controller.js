@@ -1,5 +1,7 @@
+const { promises } = require("supertest/lib/test")
 const { fetchArticlesByID } = require("../models/article-models")
 const { fetchCommentsByArticleID, addNewComment } = require("../models/comment-models")
+const { fetchUser } = require("../models/user-models")
 
 function getCommentsByArticleID(request, response,next){
     const {article_id} = request.params
@@ -15,13 +17,21 @@ function getCommentsByArticleID(request, response,next){
 }
 
 function postNewComment(request,response,next){
-    addNewComment(request.body, request.params.article_id)
+    const promises =[fetchArticlesByID(request.params.article_id),fetchUser(request.body.username)]
+
+    Promise.all(promises)
+    .then(()=>{
+        if(promises[1])
+        return addNewComment(request.body, request.params.article_id)
+    })
     .then(({rows})=>{
         response.status(201).send({comment:rows[0]})
     })
     .catch((err)=>{
         next(err)
     })
+    
+   
 }
 
 module.exports = {getCommentsByArticleID, postNewComment}

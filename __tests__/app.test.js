@@ -215,9 +215,9 @@ describe("POST /api/articles/:article_id/comments",()=>{
             username: "louis",
             body:"Wow this test adds a new comment!"
         })
-        .expect(400)
+        .expect(404)
         .then(({body})=>{
-            expect(body.msg).toBe("Bad Request")
+            expect(body.msg).toBe("User not found")
         })
     })
     it("should respond with a 404 if the article is not found",()=>{
@@ -227,9 +227,9 @@ describe("POST /api/articles/:article_id/comments",()=>{
             username: "lurker",
             body:"Wow this test adds a new comment!"
         })
-        .expect(400)
+        .expect(404)
         .then(({body})=>{
-            expect(body.msg).toBe("Bad Request")
+            expect(body.msg).toBe("No article found with that id")
         })
     })
     it("should respond with a 404 if the send comment doesnt have the correct properties",()=>{
@@ -239,9 +239,9 @@ describe("POST /api/articles/:article_id/comments",()=>{
             NotACorrectUsername: "lurker",
             NotACorrectBody:"Wow this test adds a new comment!"
         })
-        .expect(400)
+        .expect(404)
         .then(({body})=>{
-            expect(body.msg).toBe("Bad Request")
+            expect(body.msg).toBe("User not found")
         })
     })
 })
@@ -253,7 +253,6 @@ describe("PATCH /api/articles/:article_id",()=>{
         .send({ inc_votes : 1000 })
         .expect(200)
         .then(({body})=>{
-            console.log(body)
             expect(typeof body.updatedArticle).toBe("object")
             expect(typeof body.updatedArticle.author).toBe("string")
             expect(typeof body.updatedArticle.title).toBe("string")

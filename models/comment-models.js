@@ -21,6 +21,9 @@ function fetchCommentsByArticleID(article_id){
 }
 
 function addNewComment({username, body}, article_id){
+   if(!username || !body){
+      return Promise.reject({status:400,msg:"Wrong Comment Body"})
+   }
    const date = new Date();
    
    return db.query(`INSERT INTO comments(votes, created_at, author, body, article_id) VALUES( $1, $2, $3, $4, $5)
