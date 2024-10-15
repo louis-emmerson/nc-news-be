@@ -245,3 +245,70 @@ describe("POST /api/articles/:article_id/comments",()=>{
         })
     })
 })
+
+describe("PATCH /api/articles/:article_id",()=>{
+    it("Should update an article and return the updated article",()=>{
+        return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes : 1000 })
+        .expect(200)
+        .then(({body})=>{
+            console.log(body)
+            expect(typeof body.updatedArticle).toBe("object")
+            expect(typeof body.updatedArticle.author).toBe("string")
+            expect(typeof body.updatedArticle.title).toBe("string")
+            expect(typeof body.updatedArticle.article_id).toBe("number")
+            expect(typeof body.updatedArticle.body).toBe("string")
+            expect(typeof body.updatedArticle.topic).toBe("string")
+            expect(typeof body.updatedArticle.created_at).toBe("string")
+            expect(typeof body.updatedArticle.votes).toBe("number")
+            expect(typeof body.updatedArticle.article_img_url).toBe("string")
+
+            expect(body.updatedArticle.article_id).toBe(1)
+            expect(body.updatedArticle.title).toBe("Living in the shadow of a great man")
+            expect(body.updatedArticle.topic).toBe("mitch")
+            expect(body.updatedArticle.author).toBe("butter_bridge")
+            expect(body.updatedArticle.created_at).toBe("2020-07-09T20:11:00.000Z")
+            expect(body.updatedArticle.votes).toBe(1100)
+            expect(body.updatedArticle.article_img_url).toBe("https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700")
+        })
+        
+
+    })
+    it("should minus votes if given a negative number",()=>{
+        return request(app)
+        .patch("/api/articles/1")
+        .send({ inc_votes : -1000 })
+        .expect(200)
+        .then(({body})=>{
+            expect(body.updatedArticle.votes).toBe(-900)
+        })
+    })
+    it("should return a 400 error when given an invalid article id format", ()=>{
+        return request(app)
+        .patch("/api/articles/NOT-A-VALID-ID")
+        .send({ inc_votes : 1000 })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })   
+    })
+    it("should return a 404 error when given an article id that does not exist",()=>{
+        return request(app)
+        .patch("/api/articles/9999")
+        .send({ inc_votes : 1000 })
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("No article found with that id")
+        })   
+    })
+    it("should return a 400 error when given an update object with invalid properties",()=>{
+        return request(app)
+        .patch("/api/articles/1")
+        .send({ not_the_correct_key : 1000 })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        }) 
+    })
+})
