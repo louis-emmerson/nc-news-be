@@ -13,4 +13,11 @@ function fetchArticlesByID(article_id){
     })
 }
 
-module.exports = {fetchArticlesByID}
+function fetchAllArticles(){
+    return db.query(` SELECT author,title,article_id,topic,created_at,votes,article_img_url FROM articles ORDER BY created_at DESC`)
+    .then(({rows})=>{
+        return rows
+    })
+}
+
+module.exports = {fetchArticlesByID, fetchAllArticles}
