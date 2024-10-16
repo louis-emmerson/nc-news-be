@@ -102,5 +102,26 @@
         "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       }
     }
+  },
+  "GET /api/comments/:comment_id":{
+    "description": "Gets an exisiting comment by the given value ",
+    "parameters": ["comment_id"],
+    "exampleResponse": {
+          "comment": {
+            "comment_id": 3,
+            "body": "Qui sunt sit voluptas repellendus sed. Voluptatem et repellat fugiat. Rerum doloribus eveniet quidem vero aut sint officiis. Dolor facere et et architecto vero qui et perferendis dolorem. Magni quis ratione adipisci error assumenda ut. Id rerum eos facere sit nihil ipsam officia aspernatur odio.",
+            "article_id": 3,
+            "author": "grumpy19",
+            "votes": 3,
+            "created_at": "2020-09-22T23:18:00.000Z"
+          }
+    } 
+  },
+  "DELETE /api/comments/:comment_id":{
+    "description": "Deltes an exisiting comment by the given value ",
+    "parameters": ["comment_id"],
+    "exampleResponse": {}
+          
+    
   }
 }
