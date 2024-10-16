@@ -121,7 +121,5 @@
     "description": "Deltes an exisiting comment by the given value ",
     "parameters": ["comment_id"],
     "exampleResponse": {}
-          
-    
   }
 }
