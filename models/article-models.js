@@ -13,8 +13,17 @@ function fetchArticlesByID(article_id){
     })
 }
 
-function fetchAllArticles(){
-    return db.query(` SELECT author,title,article_id,topic,created_at,votes,article_img_url FROM articles ORDER BY created_at DESC`)
+function fetchAllArticles(order = "DESC"){
+    
+    const allowedQueries = ["DESC","ASC"]
+
+    let queryString = "SELECT author,title,article_id,topic,created_at,votes,article_img_url FROM articles ORDER BY created_at"
+
+    if(allowedQueries.includes(order)){
+        queryString+= ` ${order}`
+    }
+
+    return db.query(queryString)
     .then(({rows})=>{
         return rows
     })

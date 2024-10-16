@@ -127,6 +127,22 @@ describe("GET /api/articles",()=>{
             expect(body.articles).toBeSortedBy("created_at", {descending: true})
         })
     })
+    it("Should return the articles in the descending order specified by the order query",()=>{
+        return request(app)
+        .get("/api/articles?order=DESC")
+        .expect(200)
+        .then(({body})=>{
+            expect(body.articles).toBeSortedBy("created_at", {descending: true})
+        })
+    })
+    it("Should return the articles in ascending order specified by the order query",()=>{
+        return request(app)
+        .get("/api/articles?order=ASC")
+        .expect(200)
+        .then(({body})=>{
+            expect(body.articles).toBeSortedBy("created_at")
+        })
+    })
 })
 
 describe("GET /api/articles/:article_id/comments",()=>{
@@ -405,3 +421,4 @@ describe("GET /api/users", ()=>{
         })
     })
 })
+
