@@ -15,7 +15,8 @@ function getArticleByID(request, response, next){
 }
 
 function getArticles(request, response, next){
-    fetchAllArticles()
+    const {order, sort_by} = request.query
+    fetchAllArticles(order,sort_by)
     .then((results)=>{
         return Promise.all(results.map((article)=>{
             return getCommentCountByID(article.article_id)
@@ -24,11 +25,14 @@ function getArticles(request, response, next){
                 return article
             })
        })
-    )
+    )})
     .then((articles)=>{
         response.status(200).send({articles:articles})
     })
-  })
+    .catch((err)=>{
+       next(err)
+    })
+  
 }
 
 function patchArticle(request,response,next){

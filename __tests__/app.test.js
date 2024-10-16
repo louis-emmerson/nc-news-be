@@ -127,6 +127,76 @@ describe("GET /api/articles",()=>{
             expect(body.articles).toBeSortedBy("created_at", {descending: true})
         })
     })
+    describe("Articles order by query tests",()=>{
+        it("Should return the articles in the descending order specified by the order query",()=>{
+            return request(app)
+            .get("/api/articles?order=DESC")
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toBeSortedBy("created_at", {descending: true})
+            })
+        })
+        it("Should return the articles in ascending order specified by the order query",()=>{
+            return request(app)
+            .get("/api/articles?order=ASC")
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toBeSortedBy("created_at")
+            })
+        })
+
+        it("Should return 400 bad request if passed an invalid order query",()=>{
+            return request(app)
+            .get("/api/articles?order=NOTASORTQUERY")
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe("Bad Request")
+            })
+        })
+    })
+    describe("Atricles sort by query tests",()=>{
+        it("Should return the articles sorted by the query (title) ",()=>{
+            return request(app)
+            .get("/api/articles?sort_by=title")
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toBeSortedBy("title", {descending: true})
+            })
+        })
+        it("Should return the articles sorted by the query (topic) ",()=>{
+            return request(app)
+            .get("/api/articles?sort_by=topic")
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toBeSortedBy("topic", {descending: true})
+            })
+        })
+        it("Should return the articles sorted by the query (author) ",()=>{
+            return request(app)
+            .get("/api/articles?sort_by=author")
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toBeSortedBy("author", {descending: true})
+            })
+        })
+        it("Should return the articles sorted by the query (created_at) ",()=>{
+            return request(app)
+            .get("/api/articles?sort_by=created_at")
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toBeSortedBy("created_at", {descending: true})
+            })
+        })
+        it("Should return the articles sorted by the query (votes) ",()=>{
+            return request(app)
+            .get("/api/articles?sort_by=votes")
+            .expect(200)
+            .then(({body})=>{
+                expect(body.articles).toBeSortedBy("votes", {descending: true})
+            })
+        })
+    })
+    
 })
 
 describe("GET /api/articles/:article_id/comments",()=>{
@@ -405,3 +475,4 @@ describe("GET /api/users", ()=>{
         })
     })
 })
+

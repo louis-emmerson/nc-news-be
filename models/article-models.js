@@ -13,11 +13,26 @@ function fetchArticlesByID(article_id){
     })
 }
 
-function fetchAllArticles(){
-    return db.query(` SELECT author,title,article_id,topic,created_at,votes,article_img_url FROM articles ORDER BY created_at DESC`)
-    .then(({rows})=>{
-        return rows
-    })
+function fetchAllArticles(order = "DESC", sort_by = "created_at"){
+    
+    const allowedOrderQueries = ["DESC","ASC"]
+
+    const allowedSortByQueries = ["title", "created_at", "topic", "author", "votes"]
+
+    let queryString = "SELECT author,title,article_id,topic,created_at,votes,article_img_url FROM articles"
+
+    
+    if(!allowedOrderQueries.includes(order) || !allowedSortByQueries.includes(sort_by)){
+        return Promise.reject({status: 400,msg: "Bad Request"})
+    }else{
+        queryString+=` ORDER BY ${sort_by}`
+        queryString+= ` ${order}`
+        return db.query(queryString)
+        .then(({rows})=>{
+            return rows
+        })
+    }
+
 }
 
 function updateArticleByID(article_id,updateObject){
