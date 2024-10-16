@@ -83,7 +83,20 @@ describe("GET /api/articles/:article_id",()=>{
         .then(({body})=>{
             expect(body.msg).toBe("No article found with that id")
         })})
+    })
+    describe("Article response should also now include a comment count",()=>{
+        it("should return an article with a comment_count",()=>{
+            return request(app)
+            .get("/api/articles/8")
+            .expect(200)
+            .then(({body})=>{
+                expect(typeof body.article.comment_count).toBe("number")
+                expect(body.article.comment_count).toBe(0)
+            })
+        
+    })
 })
+
 
 describe("GET /api/articles",()=>{
     it("responds with an array of article objects",()=>{
