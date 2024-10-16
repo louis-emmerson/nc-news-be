@@ -13,4 +13,11 @@ function fetchUser(username){
 )
 }
 
-module.exports = {fetchUser}
+function fetchAllUsers(){
+    return db.query(`SELECT * FROM users`)
+    .then(({rows})=>{
+        return rows
+    })
+}
+
+module.exports = {fetchUser, fetchAllUsers}
