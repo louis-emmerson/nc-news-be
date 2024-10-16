@@ -1,6 +1,6 @@
 const { promises } = require("supertest/lib/test")
 const { fetchArticlesByID } = require("../models/article-models")
-const { fetchCommentsByArticleID, addNewComment } = require("../models/comment-models")
+const { fetchCommentsByArticleID, addNewComment, deleteCommentByID, getCommentByID, getCommentCountByID } = require("../models/comment-models")
 const { fetchUser } = require("../models/user-models")
 
 function getCommentsByArticleID(request, response,next){
@@ -34,4 +34,29 @@ function postNewComment(request,response,next){
    
 }
 
-module.exports = {getCommentsByArticleID, postNewComment}
+function getComment(request, response, next){
+    const comment_id = request.params.comment_id
+    getCommentByID(comment_id)
+    .then((results)=>{
+        response.status(200).send({comment: results})
+    })
+    .catch((err)=>{
+        next(err)
+    })
+}
+
+function deleteComment(request,response, next){
+    const comment_id = request.params.comment_id
+    getCommentCountByID(comment_id)
+    .then(()=>{
+        return deleteCommentByID(comment_id)
+    })
+    .then(()=>{
+        response.status(204).send()
+    })
+    .catch((err)=>{
+        next(err)
+    })
+}
+
+module.exports = {getCommentsByArticleID, postNewComment, deleteComment, getComment}
