@@ -1,4 +1,3 @@
-const { promises } = require("supertest/lib/test")
 const { fetchArticlesByID } = require("../models/article-models")
 const { fetchCommentsByArticleID, addNewComment, deleteCommentByID, getCommentByID, getCommentCountByID } = require("../models/comment-models")
 const { fetchUser } = require("../models/user-models")
