@@ -13,20 +13,28 @@ function fetchArticlesByID(article_id){
     })
 }
 
-function fetchAllArticles(order = "DESC", sort_by = "created_at"){
-    
+function fetchAllArticles(order = "DESC", sort_by = "created_at", topic){    
     const allowedOrderQueries = ["DESC","ASC"]
 
     const allowedSortByQueries = ["title", "created_at", "topic", "author", "votes"]
 
+    const allowedTopicQueries = ["mitch", "cats", "paper", undefined]
+
+    // let queryString = "SELECT author,title,article_id,topic,created_at,votes,article_img_url FROM articles"
     let queryString = "SELECT author,title,article_id,topic,created_at,votes,article_img_url FROM articles"
 
     
-    if(!allowedOrderQueries.includes(order) || !allowedSortByQueries.includes(sort_by)){
+    if(!allowedOrderQueries.includes(order) || !allowedSortByQueries.includes(sort_by)|| !allowedTopicQueries.includes(topic)){
         return Promise.reject({status: 400,msg: "Bad Request"})
     }else{
+        if(topic !== undefined){
+            queryString +=` WHERE topic = '${topic}'`
+        }
+
         queryString+=` ORDER BY ${sort_by}`
         queryString+= ` ${order}`
+
+
         return db.query(queryString)
         .then(({rows})=>{
             return rows

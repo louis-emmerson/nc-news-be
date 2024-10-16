@@ -1,4 +1,5 @@
 const { response } = require("../app")
+const { topicData } = require("../db/data/test-data")
 const { fetchArticlesByID, fetchAllArticles, updateArticleByID } = require("../models/article-models")
 const { getCommentCountByID } = require("../models/comment-models")
 
@@ -15,8 +16,8 @@ function getArticleByID(request, response, next){
 }
 
 function getArticles(request, response, next){
-    const {order, sort_by} = request.query
-    fetchAllArticles(order,sort_by)
+    const {order, sort_by, topic} = request.query
+    fetchAllArticles(order ,sort_by, topic)
     .then((results)=>{
         return Promise.all(results.map((article)=>{
             return getCommentCountByID(article.article_id)

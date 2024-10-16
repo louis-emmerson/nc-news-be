@@ -3,6 +3,7 @@ const app = require("../app")
 const db = require("../db/connection")
 const data = require("../db/data/test-data")
 const seed = require("../db/seeds/seed")
+const articles = require("../db/data/test-data/articles")
 
 
 beforeEach(()=>{
@@ -154,7 +155,7 @@ describe("GET /api/articles",()=>{
             })
         })
     })
-    describe("Atricles sort by query tests",()=>{
+    describe("Articles sort by query tests",()=>{
         it("Should return the articles sorted by the query (title) ",()=>{
             return request(app)
             .get("/api/articles?sort_by=title")
@@ -196,8 +197,52 @@ describe("GET /api/articles",()=>{
             })
         })
     })
+    describe("Articles topic query tests",()=>{
+        it("Should return the articles that have the topic (mitch)",()=>{
+            return request(app)
+            .get("/api/articles?topic=mitch")
+            .expect(200)
+            .then(({body})=>{
+                body.articles.forEach(article => {
+                    expect(article.topic).toBe("mitch")
+                });
+            })
+        })
+
+        it("Should return the articles that have the topic (cats)",()=>{
+            return request(app)
+            .get("/api/articles?topic=cats")
+            .expect(200)
+            .then(({body})=>{
+                body.articles.forEach(article => {
+                    expect(article.topic).toBe("cats")
+                });
+            })
+        })
+        it("Should return the articles that have the topic (paper)",()=>{
+            return request(app)
+            .get("/api/articles?topic=paper")
+            .expect(200)
+            .then(({body})=>{
+                body.articles.forEach(article => {
+                    expect(article.topic).toBe("paper")
+                });
+            })
+        })
+        it("Should return 400 bad request when given an invalid topic (NotAVailidTopic)",()=>{
+            return request(app)
+            .get("/api/articles?topic=NotAVailidTopic")
+            .expect(400)
+            .then(({body})=>{
+                    expect(body.msg).toBe("Bad Request")
+            })
+        })
     
-})
+    })
+        
+    }
+    
+)
 
 describe("GET /api/articles/:article_id/comments",()=>{
     it("should respond with an array of comment objects with the matching article id",()=>{
