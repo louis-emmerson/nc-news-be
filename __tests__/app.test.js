@@ -311,3 +311,75 @@ describe("PATCH /api/articles/:article_id",()=>{
         }) 
     })
 })
+
+describe("GET /api/comments/:comment_id",()=>{
+    it("should return a 200 and the comment in the response",()=>{
+        return request(app)
+        .get("/api/comments/1")
+        .expect(200)
+        .then(({body})=>{
+            expect(body.comment.length).not.toBe(0)
+            const comment = body.comment
+            expect(typeof comment.comment_id).toBe("number")
+            expect(typeof comment.votes).toBe("number")
+            expect(typeof comment.created_at).toBe("string")
+            expect(typeof comment.author).toBe("string")
+            expect(typeof comment.body).toBe("string")
+            expect(typeof comment.article_id).toBe("number")
+        })
+    })
+    it("should return a 500 error and bad request if passed a none valid id",()=>{
+        return request(app)
+        .get("/api/comments/not-a-valid-id")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("should return a 404 error and not found if there is no comment with that id",()=>{
+        return request(app)
+        .get("/api/comments/99999")
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("Comment not found")
+        })
+    })
+
+    
+
+})
+
+describe("DELETE /api/comments/:comment_id",()=>{
+    it("should return a 204 and delete the specified comment",()=>{
+        return request(app)
+        .delete("/api/comments/1")
+        .expect(204)
+        .then(({body})=>{
+            expect(body).toEqual({})
+        })
+        .then(()=>{
+            return request(app)
+            .get("/api/comments/1")
+            .expect(404)
+            .then(({body})=>{
+                expect(body.msg).toBe("Comment not found")
+            })
+        })
+    })
+    it("should return a 500 error and bad request if passed a none valid id",()=>{
+        return request(app)
+        .delete("/api/comments/not-a-valid-id")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("should return a 404 error and not found if passed a a vaild id that doesnt exist",()=>{
+        return request(app)
+            .get("/api/comments/100")
+            .expect(404)
+            .then(({body})=>{
+                expect(body.msg).toBe("Comment not found")
+            })
+    })
+})
