@@ -446,6 +446,7 @@ describe("GET /api/comments/:comment_id",()=>{
         .get("/api/comments/1")
         .expect(200)
         .then(({body})=>{
+            console.log(body)
             expect(body.comment.length).not.toBe(0)
             const comment = body.comment
             expect(typeof comment.comment_id).toBe("number")
@@ -547,4 +548,55 @@ describe("GET /api/users/:username",()=>{
             expect(body.msg).toBe("User not found")
         })
     })
+})
+
+describe("PATCH /api/comments/:comment_id",()=>{
+    it("should update the votes property on the given id by the amount in the inc_votes property (positive number)",()=>{
+        return request(app)
+        .patch("/api/comments/1")
+        .send({ inc_votes : 1 })
+        .expect(200)
+        .then(({body})=>{
+            expect(body.updatedComment.votes).toBe(17)
+        })
+
+    })
+    it("should update the votes property on the given id by the amount in the inc_votes property(negative number)",()=>{
+        return request(app)
+        .patch("/api/comments/1")
+        .send({ inc_votes : -1 })
+        .expect(200)
+        .then(({body})=>{
+            expect(body.updatedComment.votes).toBe(15)
+        })
+
+    })
+    it("should return 400 bad request if passed an invalid comment id",()=>{
+        return request(app)
+        .patch("/api/comments/not-an-id")
+        .send({ inc_votes : -1 })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("should return 404 comment not found if passed a comment id that doesnt exist",()=>{
+        return request(app)
+        .patch("/api/comments/9999")
+        .send({ inc_votes : -1 })
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("No comment found to update")
+        })
+    })
+    it("should return 400 bad request if passed no votes to update",()=>{
+        return request(app)
+        .patch("/api/comments/1")
+        .send({})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+
 })
