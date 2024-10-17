@@ -148,5 +148,28 @@
             "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
           }
     } 
+  },
+  "POST /api/articles":{
+    "description": "Adds a new article and returns it as an object. If no image is passed, a default will be used",
+    "body": {"author":"lurker",
+        "title":"Windass volleys Hull into the promised land",
+        "body":"Hull City will be playing Premier League football next season after Dean Windass scored the only goal of the Championship play-off final to send his hometown club into England's top division for the first time in their 104-year history at the expense of Bristol City. Windass, 39, struck a magnificent volley late in the first half to give Phil Brown's side a narrow win and a promotion which will be worth millions of pounds.In a tight game typical of this Championship season Windass was able to produce the one outstanding moment of quality with his 39th-minute strike and earn himself another trip to face the likes of Manchester United and Chelsea next season.",
+        "topic":"paper",
+        "article_img_url":"https://images.pexels.com/photos/11035380/pexels-photo-11035380.jpeg?w=700&h=700"
+    },
+    "exampleResponse": {
+      "newArticle": {
+        "article_id": 14,
+        "title": "Windass volleys Hull into the promised land",
+        "topic": "paper",
+        "author": "lurker",
+        "body": "Hull City will be playing Premier League football next season after Dean Windass scored the only goal of the Championship play-off final to send his hometown club into England's top division for the first time in their 104-year history at the expense of Bristol City. Windass, 39, struck a magnificent volley late in the first half to give Phil Brown's side a narrow win and a promotion which will be worth millions of pounds.In a tight game typical of this Championship season Windass was able to produce the one outstanding moment of quality with his 39th-minute strike and earn himself another trip to face the likes of Manchester United and Chelsea next season.",
+        "created_at": "2024-10-17T14:32:11.337Z",
+        "votes": 0,
+        "article_img_url": "https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700",
+        "comment_count": 0
+      }
+    }
   }
+
 }
