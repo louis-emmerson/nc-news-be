@@ -53,4 +53,29 @@ function updateArticleByID(article_id,updateObject){
         WHERE article_id = $2`,[updateObject.inc_votes,article_id])
 }
 
-module.exports = {fetchArticlesByID, fetchAllArticles, updateArticleByID}
+function addNewArticle(newArticleObj){
+    const {title, topic, author, body, article_img_url=null } = newArticleObj
+    const date = new Date() 
+
+    let insertString = "INSERT INTO articles(title, topic, author, body, created_at, votes"
+    let valuesString = "VALUES ($1, $2, $3, $4, $5, $6"
+
+    const valueInserts = [title, topic, author, body, date, 0]
+    if(!article_img_url){
+        insertString += ")"
+        valuesString += ")"
+
+    }else{
+        insertString += ", article_img_url)"
+        valuesString += ", $7)"
+        valueInserts.push(article_img_url)
+    }
+    
+    let queryString = `${insertString} ${valuesString} RETURNING *`
+
+    return db.query(queryString,valueInserts)
+    .then((result)=>{
+        return result.rows[0].article_id
+    })
+}
+module.exports = {fetchArticlesByID, fetchAllArticles, updateArticleByID, addNewArticle}
