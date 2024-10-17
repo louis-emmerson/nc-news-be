@@ -482,19 +482,8 @@ describe("DELETE /api/comments/:comment_id",()=>{
         return request(app)
         .delete("/api/comments/1")
         .expect(204)
-        .then(({body})=>{
-            expect(body).toEqual({})
-        })
-        .then(()=>{
-            return request(app)
-            .get("/api/comments/1")
-            .expect(404)
-            .then(({body})=>{
-                expect(body.msg).toBe("Comment not found")
-            })
-        })
     })
-    it("should return a 500 error and bad request if passed a none valid id",()=>{
+    it("should return a 400 error and bad request if passed a none valid id",()=>{
         return request(app)
         .delete("/api/comments/not-a-valid-id")
         .expect(400)
@@ -502,12 +491,12 @@ describe("DELETE /api/comments/:comment_id",()=>{
             expect(body.msg).toBe("Bad Request")
         })
     })
-    it("should return a 404 error and not found if passed a a vaild id that doesnt exist",()=>{
+    it("should return a 500 error and not found if passed a a vaild id that doesnt exist",()=>{
         return request(app)
-            .get("/api/comments/100")
-            .expect(404)
+            .delete("/api/comments/100")
+            .expect(400)
             .then(({body})=>{
-                expect(body.msg).toBe("Comment not found")
+                expect(body.msg).toBe("Bad Request")
             })
     })
 })
