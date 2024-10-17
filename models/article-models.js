@@ -17,7 +17,8 @@ function fetchArticlesByID(article_id){
     })
 }
 
-function fetchAllArticles(order = "DESC", sort_by = "created_at", topic){    
+function fetchAllArticles(order = "DESC", sort_by = "created_at", topic, p , limit=10){
+    
     const allowedOrderQueries = ["DESC","ASC"]
 
     const allowedSortByQueries = ["title", "created_at", "topic", "author", "votes"]
@@ -38,6 +39,9 @@ function fetchAllArticles(order = "DESC", sort_by = "created_at", topic){
         queryString+=` ORDER BY ${sort_by}`
         queryString+= ` ${order}`
 
+        if(limit){
+            queryString += ` LIMIT ${limit}`
+        }
 
         return db.query(queryString)
         .then(({rows})=>{
