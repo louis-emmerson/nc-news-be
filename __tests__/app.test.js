@@ -599,3 +599,80 @@ describe("PATCH /api/comments/:comment_id",()=>{
     })
 
 })
+describe("POST /api/articles",()=>{
+    it("should respond with 201 and the newly created article object", ()=>{
+        return request(app)
+        .post("/api/articles")
+        .send({author:"lurker",
+               title:"Windass volleys Hull into the promised land",
+               body:"Hull City will be playing Premier League football next season after Dean Windass scored the only goal of the Championship play-off final to send his hometown club into England's top division for the first time in their 104-year history at the expense of Bristol City. Windass, 39, struck a magnificent volley late in the first half to give Phil Brown's side a narrow win and a promotion which will be worth millions of pounds.In a tight game typical of this Championship season Windass was able to produce the one outstanding moment of quality with his 39th-minute strike and earn himself another trip to face the likes of Manchester United and Chelsea next season.",
+               topic:"paper",
+               article_img_url:"https://i.guim.co.uk/img/static/sys-images/Football/Pix/pictures/2008/05/24/460WindassJamieMcDonaldGetty.jpg?width=620&dpr=2&s=none&crop=none"
+        })
+        .expect(201)
+        .then(({body})=>{
+            const newArticle = body.newArticle 
+            expect(typeof newArticle.author).toBe("string")
+            expect(typeof newArticle.title).toBe("string")
+            expect(typeof newArticle.article_id).toBe("number")
+            expect(typeof newArticle.topic).toBe("string")
+            expect(typeof newArticle.created_at).toBe("string")
+            expect(typeof newArticle.votes).toBe("number")
+            expect(typeof newArticle.article_img_url).toBe("string")
+            expect(typeof newArticle.comment_count).toBe("number")
+            expect(typeof newArticle.body).toBe("string")
+
+            expect(newArticle).toEqual(expect.objectContaining({
+                author: 'lurker',
+                title: 'Windass volleys Hull into the promised land',
+                topic: 'paper',
+                votes: 0,
+                article_img_url: 'https://i.guim.co.uk/img/static/sys-images/Football/Pix/pictures/2008/05/24/460WindassJamieMcDonaldGetty.jpg?width=620&dpr=2&s=none&crop=none',
+                comment_count: 0,
+                body:"Hull City will be playing Premier League football next season after Dean Windass scored the only goal of the Championship play-off final to send his hometown club into England's top division for the first time in their 104-year history at the expense of Bristol City. Windass, 39, struck a magnificent volley late in the first half to give Phil Brown's side a narrow win and a promotion which will be worth millions of pounds.In a tight game typical of this Championship season Windass was able to produce the one outstanding moment of quality with his 39th-minute strike and earn himself another trip to face the likes of Manchester United and Chelsea next season."
+              }))
+        })
+    })
+    it("should respond with 400 bad resquest when given a new article a author that doesnt exist",()=>{
+        return request(app)
+        .post("/api/articles")
+        .send({author:"NOT a user",
+               title:"Windass volleys Hull into the promised land",
+               body:"Hull City will be playing Premier League football next season after Dean Windass scored the only goal of the Championship play-off final to send his hometown club into England's top division for the first time in their 104-year history at the expense of Bristol City. Windass, 39, struck a magnificent volley late in the first half to give Phil Brown's side a narrow win and a promotion which will be worth millions of pounds.In a tight game typical of this Championship season Windass was able to produce the one outstanding moment of quality with his 39th-minute strike and earn himself another trip to face the likes of Manchester United and Chelsea next season.",
+               topic:"paper",
+               article_img_url:"https://i.guim.co.uk/img/static/sys-images/Football/Pix/pictures/2008/05/24/460WindassJamieMcDonaldGetty.jpg?width=620&dpr=2&s=none&crop=none"
+        })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+    })
+    })
+    it("should respond with 400 bad resquest when given a new article a topic that doesnt exist",()=>{
+        return request(app)
+        .post("/api/articles")
+        .send({author:"lurker",
+               title:"Windass volleys Hull into the promised land",
+               body:"Hull City will be playing Premier League football next season after Dean Windass scored the only goal of the Championship play-off final to send his hometown club into England's top division for the first time in their 104-year history at the expense of Bristol City. Windass, 39, struck a magnificent volley late in the first half to give Phil Brown's side a narrow win and a promotion which will be worth millions of pounds.In a tight game typical of this Championship season Windass was able to produce the one outstanding moment of quality with his 39th-minute strike and earn himself another trip to face the likes of Manchester United and Chelsea next season.",
+               topic:"football",
+               article_img_url:"https://i.guim.co.uk/img/static/sys-images/Football/Pix/pictures/2008/05/24/460WindassJamieMcDonaldGetty.jpg?width=620&dpr=2&s=none&crop=none"
+        })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+    })
+    })
+    it("should respond with 201 and an object with a default image if no article_imgh_url is passed",()=>{
+        return request(app)
+        .post("/api/articles")
+        .send({author:"lurker",
+               title:"Windass volleys Hull into the promised land",
+               body:"Hull City will be playing Premier League football next season after Dean Windass scored the only goal of the Championship play-off final to send his hometown club into England's top division for the first time in their 104-year history at the expense of Bristol City. Windass, 39, struck a magnificent volley late in the first half to give Phil Brown's side a narrow win and a promotion which will be worth millions of pounds.In a tight game typical of this Championship season Windass was able to produce the one outstanding moment of quality with his 39th-minute strike and earn himself another trip to face the likes of Manchester United and Chelsea next season.",
+               topic:"paper"
+        })
+        .expect(201)
+        .then(({body})=>{
+            const {newArticle} = body
+            expect(newArticle.article_img_url).toBe('https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700')
+    })
+    })
+})
