@@ -56,4 +56,15 @@ function deleteCommentByID(comment_id){
       })
 }
 
-module.exports = {getCommentCountByID,fetchCommentsByArticleID, addNewComment,deleteCommentByID, getCommentByID}
+function updateCommentByID(comment_id, votes){
+   return db.query(`UPDATE comments
+                    SET votes = votes + $2
+                    WHERE comment_id = $1`,[comment_id, votes])
+         .then((results)=>{
+            if(results.rowCount === 0) return Promise.reject({status:404,msg:"No comment found to update"})
+            return getCommentByID(comment_id)
+         })
+
+}
+
+module.exports = {getCommentCountByID,fetchCommentsByArticleID, addNewComment,deleteCommentByID, getCommentByID,updateCommentByID}

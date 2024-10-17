@@ -1,5 +1,5 @@
 const { fetchArticlesByID } = require("../models/article-models")
-const { fetchCommentsByArticleID, addNewComment, deleteCommentByID, getCommentByID, getCommentCountByID } = require("../models/comment-models")
+const { fetchCommentsByArticleID, addNewComment, deleteCommentByID, getCommentByID, getCommentCountByID, updateCommentByID } = require("../models/comment-models")
 const { fetchUser } = require("../models/user-models")
 
 function getCommentsByArticleID(request, response,next){
@@ -58,4 +58,14 @@ function deleteComment(request,response, next){
     })
 }
 
-module.exports = {getCommentsByArticleID, postNewComment, deleteComment, getComment}
+function updateComment(request,response, next){
+    updateCommentByID(request.params.comment_id,request.body.inc_votes)
+    .then((updatedComment)=>{
+        response.status(200).send({updatedComment})
+    })
+    .catch((err)=>{
+        next(err)
+    })
+}
+
+module.exports = {getCommentsByArticleID, postNewComment, deleteComment, getComment ,updateComment}
