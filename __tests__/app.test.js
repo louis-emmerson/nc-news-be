@@ -446,7 +446,6 @@ describe("GET /api/comments/:comment_id",()=>{
         .get("/api/comments/1")
         .expect(200)
         .then(({body})=>{
-            console.log(body)
             expect(body.comment.length).not.toBe(0)
             const comment = body.comment
             expect(typeof comment.comment_id).toBe("number")
