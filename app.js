@@ -2,9 +2,10 @@ const express = require("express")
 const app = express()
 const {getAllTopics} = require("./controllers/topics-controller")
 const {getAllEndpoints} = require("./controllers/endpoints-controller") 
-const { getAllUsers } = require("./controllers/users-controller")
 const articles = require("./articles")
 const comments = require("./comments")
+const users = require("./users")
+
 
 
 app.use(express.json())
@@ -18,7 +19,8 @@ app.use("/api/articles", articles)
 
 app.use("/api/comments", comments)
 
-app.get("/api/users", getAllUsers)
+app.use("/api/users", users)
+
 
 app.all("/*", (request, response)=>{
     response.status(404).send({msg: "Route not found!"})

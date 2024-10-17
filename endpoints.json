@@ -118,10 +118,20 @@
     } 
   },
   "DELETE /api/comments/:comment_id":{
-    "description": "Deltes an exisiting comment by the given value ",
+    "description": "Deltes an existing comment by the comment_id",
     "parameters": ["comment_id"],
     "exampleResponse": {}
-          
-    
+
+  },
+  "GET /api/users/:username":{
+    "description": "Gets an existing user by username",
+    "parameters": ["username"],
+    "exampleResponse": {
+          "user": {
+            "username": "lurker",
+            "name": "do_nothing",
+            "avatar_url": "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png"
+          }
+    } 
   }
 }
