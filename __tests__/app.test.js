@@ -3,7 +3,7 @@ const app = require("../app")
 const db = require("../db/connection")
 const data = require("../db/data/test-data")
 const seed = require("../db/seeds/seed")
-const articles = require("../db/data/test-data/articles")
+
 
 
 beforeEach(()=>{
@@ -523,3 +523,28 @@ describe("GET /api/users", ()=>{
     })
 })
 
+describe("GET /api/users/:username",()=>{
+    it("should return a 200 with a user matching the corresponding username",()=>{
+    return request(app)
+    .get("/api/users/butter_bridge")
+    .expect(200)
+    .then(({body})=>{
+        expect(typeof body.user.username).toBe("string")
+        expect(typeof body.user.avatar_url).toBe("string")
+        expect(typeof body.user.name).toBe("string")
+
+        expect(body.user.username).toBe("butter_bridge")
+        expect(body.user.name).toBe("jonny")
+        expect(body.user.avatar_url).toBe("https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg")
+    })
+    })
+
+    it("should return a 404 when given a username that does not exist",()=>{
+        return request(app)
+        .get("/api/users/louis")
+        .expect(404)
+        .then(({body})=>{
+            expect(body.msg).toBe("User not found")
+        })
+    })
+})

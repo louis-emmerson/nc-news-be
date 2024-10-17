@@ -15,7 +15,7 @@ function fetchUser(username){
 
 function fetchAllUsers(){
     return db.query(`SELECT * FROM users`)
-    .then(({rows})=>{
+    .then(({rows})=>{        
         return rows
     })
 }
