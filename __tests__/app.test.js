@@ -672,9 +672,7 @@ describe("POST /api/articles",()=>{
         .expect(201)
         .then(({body})=>{
             const {newArticle} = body
-            
-                expect(newArticle.article_img_url).toBe('https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700')
-
+            expect(newArticle.article_img_url).toBe('https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700')
     })
     })
 })
