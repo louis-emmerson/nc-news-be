@@ -29,6 +29,18 @@ function fetchAllArticles(order = "DESC", sort_by = "created_at", topic, p , lim
     let queryString = "SELECT author,title,article_id,topic,created_at,votes,article_img_url FROM articles"
 
     
+    if(p){
+        if(isNaN(p)){
+            return Promise.reject({status: 400,msg: "Bad Request"})
+        }
+    }
+
+    if(limit){
+        if(isNaN(limit)){
+            return Promise.reject({status: 400,msg: "Bad Request"})
+        }
+    }
+
     if(!allowedOrderQueries.includes(order) || !allowedSortByQueries.includes(sort_by)|| !allowedTopicQueries.includes(topic)){
         return Promise.reject({status: 400,msg: "Bad Request"})
     }else{
@@ -39,9 +51,12 @@ function fetchAllArticles(order = "DESC", sort_by = "created_at", topic, p , lim
         queryString+=` ORDER BY ${sort_by}`
         queryString+= ` ${order}`
 
-        if(limit){
-            queryString += ` LIMIT ${limit}`
+        queryString += ` LIMIT ${limit}`
+
+        if(p){
+            queryString += ` OFFSET ${p*limit}`
         }
+
 
         return db.query(queryString)
         .then(({rows})=>{

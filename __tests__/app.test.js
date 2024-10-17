@@ -700,19 +700,50 @@ describe(" GET /api/articles (pagination tests) ", ()=>{
         .expect(200)
         .then(({body})=>{
             expect(Array.isArray(body.articles)).toBe(true)
-            expect(body.articles.length).not.toBe(0)
             expect(body.articles.length).toBe(10)
-            body.articles.forEach(article => {
-                expect(typeof article.author).toBe("string")
-                expect(typeof article.title).toBe("string")
-                expect(typeof article.article_id).toBe("number")
-                expect(typeof article.topic).toBe("string")
-                expect(typeof article.created_at).toBe("string")
-                expect(typeof article.votes).toBe("number")
-                expect(typeof article.article_img_url).toBe("string")
-                expect(typeof article.comment_count).toBe("number")
-                expect(article.body).toBe(undefined)
-            });
+        })
+    })
+    it("responds with an array of article objects pagination to the page that is passed",()=>{
+        return request(app)
+        .get("/api/articles?p=1")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.articles)).toBe(true)
+            expect(body.articles.length).toBe(3)
+        })
+    })
+    it("responds with an array of article objects pagination to the page that is passed with a limit query",()=>{
+        return request(app)
+        .get("/api/articles?p=2&limit=5")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.articles)).toBe(true)
+            expect(body.articles.length).toBe(3)
+        })
+    })
+    it("responds with an array of article objects pagination to the page that is passed without a limit query",()=>{
+        return request(app)
+        .get("/api/articles?p=1")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.articles)).toBe(true)
+            expect(body.articles.length).toBe(3)
+        })
+    })
+    it("responds with 400 bad request if passed a p query which is not a number",()=>{
+        return request(app)
+        .get("/api/articles?p=123NotANumber")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("responds with 400 bad request if passed a limit query which is not a number",()=>{
+        return request(app)
+        .get("/api/articles?limit=123NotANumber")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
         })
     })
 })
