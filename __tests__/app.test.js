@@ -127,11 +127,7 @@ describe("GET /api/articles",()=>{
                 article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
                 comment_count: 2
               }]))
-    
-
-
         })
-        
     })
     it("Should return the articles in sorted in descending order based on the date they were created",()=>{
         return request(app)
@@ -674,5 +670,80 @@ describe("POST /api/articles",()=>{
             const {newArticle} = body
             expect(newArticle.article_img_url).toBe('https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700')
     })
+    })
+})
+describe(" GET /api/articles (pagination tests) ", ()=>{
+    it("responds with an array of article objects matching the length of the limit",()=>{
+        return request(app)
+        .get("/api/articles?limit=9")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.articles)).toBe(true)
+            expect(body.articles.length).not.toBe(0)
+            expect(body.articles.length).toBe(9)
+            body.articles.forEach(article => {
+                expect(typeof article.author).toBe("string")
+                expect(typeof article.title).toBe("string")
+                expect(typeof article.article_id).toBe("number")
+                expect(typeof article.topic).toBe("string")
+                expect(typeof article.created_at).toBe("string")
+                expect(typeof article.votes).toBe("number")
+                expect(typeof article.article_img_url).toBe("string")
+                expect(typeof article.comment_count).toBe("number")
+                expect(article.body).toBe(undefined)
+            });
+        })
+    })
+    it("responds with an array of article objects matching the length 10 by default when no limit is passed",()=>{
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.articles)).toBe(true)
+            expect(body.articles.length).toBe(10)
+        })
+    })
+    it("responds with an array of article objects pagination to the page that is passed",()=>{
+        return request(app)
+        .get("/api/articles?p=1")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.articles)).toBe(true)
+            expect(body.articles.length).toBe(3)
+        })
+    })
+    it("responds with an array of article objects pagination to the page that is passed with a limit query",()=>{
+        return request(app)
+        .get("/api/articles?p=2&limit=5")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.articles)).toBe(true)
+            expect(body.articles.length).toBe(3)
+        })
+    })
+    it("responds with an array of article objects pagination to the page that is passed without a limit query",()=>{
+        return request(app)
+        .get("/api/articles?p=1")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.articles)).toBe(true)
+            expect(body.articles.length).toBe(3)
+        })
+    })
+    it("responds with 400 bad request if passed a p query which is not a number",()=>{
+        return request(app)
+        .get("/api/articles?p=123NotANumber")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("responds with 400 bad request if passed a limit query which is not a number",()=>{
+        return request(app)
+        .get("/api/articles?limit=123NotANumber")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
     })
 })

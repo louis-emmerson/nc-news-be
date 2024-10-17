@@ -10,8 +10,8 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all articles",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "description": "Serves an array of all articles with optional filters and pagination. default limit of 10",
+    "queries": ["author", "topic", "sort_by", "order", "p", "limit"],
     "exampleResponse": {
       "articles": [
         {

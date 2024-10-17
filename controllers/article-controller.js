@@ -16,8 +16,8 @@ function getArticleByID(request, response, next){
 }
 
 function getArticles(request, response, next){
-    const {order, sort_by, topic} = request.query
-    fetchAllArticles(order ,sort_by, topic)
+    const {order, sort_by, topic, p, limit} = request.query
+    fetchAllArticles(order ,sort_by, topic, p, limit)
     .then((results)=>{
         return Promise.all(results.map((article)=>{
             return getCommentCountByID(article.article_id)
