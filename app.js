@@ -1,11 +1,10 @@
 const express = require("express")
 const app = express()
-const {getAllTopics} = require("./controllers/topics-controller")
 const {getAllEndpoints} = require("./controllers/endpoints-controller") 
-const articles = require("./articles")
-const comments = require("./comments")
-const users = require("./users")
-const topics = require("./topics")
+const articles = require("./routers/articles")
+const comments = require("./routers/comments")
+const users = require("./routers/users")
+const topics = require("./routers/topics")
 
 
 app.use(express.json())

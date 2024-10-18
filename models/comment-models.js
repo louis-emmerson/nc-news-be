@@ -10,7 +10,7 @@ function getCommentCountByID(article_id){
             })
 }
 
-function fetchCommentsByArticleID(article_id, limit=10, p){
+function fetchCommentsByArticleID(article_id, limit=10, p=0){
 
    if(p){
       if(isNaN(p)){

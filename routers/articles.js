@@ -1,6 +1,6 @@
 const express = require('express')
-const { getArticles, getArticleByID, patchArticle, postNewArticle, deleteArticle} = require('./controllers/article-controller')
-const { getCommentsByArticleID, postNewComment } = require('./controllers/comments-controller')
+const { getArticles, getArticleByID, patchArticle, postNewArticle, deleteArticle} = require('../controllers/article-controller')
+const { getCommentsByArticleID, postNewComment } = require('../controllers/comments-controller')
 const router = express.Router()
 
 router.get("/", getArticles)

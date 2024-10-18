@@ -19,7 +19,7 @@ function fetchArticlesByID(article_id){
     })
 }
 
-function fetchAllArticles(order = "DESC", sort_by = "created_at", topic, p , limit=10){
+function fetchAllArticles(order = "DESC", sort_by = "created_at", topic, p=0 , limit=10){
     
     const allowedOrderQueries = ["DESC","ASC"]
 
@@ -55,7 +55,7 @@ function fetchAllArticles(order = "DESC", sort_by = "created_at", topic, p , lim
         queryString += ` LIMIT ${limit}`
 
         if(p){
-            queryString += ` OFFSET ${p*limit}`
+            queryString += ` OFFSET ${p *limit}`
         }
 
 
