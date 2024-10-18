@@ -170,6 +170,18 @@
         "comment_count": 0
       }
     }
+  },
+  "POST /api/topics":{
+    "description": "Adds a new topic and returns it as an object",
+    "body": {
+      "slug": "topic name here",
+      "description": "description here"
+    },
+    "exampleResponse": {
+        "newTopic":{
+          "slug": "topic name here",
+          "description": "description here"
+        }
+    }
   }
-
 }
