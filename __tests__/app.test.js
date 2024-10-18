@@ -820,3 +820,45 @@ describe("GET /api/articles/:article_id/comments (pagination tests) ", ()=>{
         })
     })
 })
+
+describe("POST /api/topics",()=>{
+    it("it should return 201 and the newly created topic",()=>{
+        return request(app)
+        .post("/api/topics")
+        .send({
+            "slug": "football",
+            "description": "articles about football"
+          })
+        .expect(201)
+        .then(({body})=>{
+            expect(typeof body.newTopic.slug).toBe("string")
+            expect(typeof body.newTopic.description).toBe("string")
+
+            expect(body.newTopic.slug).toBe("football")
+            expect(body.newTopic.description).toBe("articles about football")
+        })
+    })
+    it("should return 400 Bad Request when given no body",()=>{
+        return request(app)
+        .post("/api/topics")
+        .send({})
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("should return 400 Bad Request when a topic slug that already exists",()=>{
+        return request(app)
+        .post("/api/topics")
+        .send({
+            description: 'what books are made of',
+            slug: 'paper'
+          })
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+
+})
+

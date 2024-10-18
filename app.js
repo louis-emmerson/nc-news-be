@@ -5,7 +5,7 @@ const {getAllEndpoints} = require("./controllers/endpoints-controller")
 const articles = require("./articles")
 const comments = require("./comments")
 const users = require("./users")
-
+const topics = require("./topics")
 
 
 app.use(express.json())
@@ -13,7 +13,7 @@ app.use(express.json())
 
 app.get("/api", getAllEndpoints)
 
-app.get("/api/topics", getAllTopics)
+app.use("/api/topics", topics)
 
 app.use("/api/articles", articles)
 
@@ -35,7 +35,7 @@ app.use((err, req, res, next)=>{
 })
 
 app.use((err, request, response, next)=>{
-    if(err.code === '22P02' || err.code === '23503'|| err.code === '23502'){
+    if(err.code === '22P02' || err.code === '23503'|| err.code === '23502' || err.code === '23505'){
         response.status(400).send({msg: "Bad Request"})
     }else{
         next(err)
