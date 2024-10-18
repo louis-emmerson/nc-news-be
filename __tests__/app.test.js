@@ -747,3 +747,76 @@ describe(" GET /api/articles (pagination tests) ", ()=>{
         })
     })
 })
+
+describe("GET /api/articles/:article_id/comments (pagination tests) ", ()=>{
+    it("responds with an array of article comment objects matching the length of the limit",()=>{
+        return request(app)
+        .get("/api/articles/1/comments?limit=2")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.comments)).toBe(true)
+            expect(body.comments.length).not.toBe(0)
+            expect(body.comments.length).toBe(2)
+            body.comments.forEach(comment => {
+                expect(typeof comment.comment_id).toBe("number")
+                expect(typeof comment.votes).toBe("number")
+                expect(typeof comment.created_at).toBe("string")
+                expect(typeof comment.author).toBe("string")
+                expect(typeof comment.body).toBe("string")
+                expect(typeof comment.article_id).toBe("number")
+            });
+        })
+    })
+    it("responds with an array of article comment objects matching the length 10 by default when no limit is passed",()=>{
+        return request(app)
+        .get("/api/articles/1/comments")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.comments)).toBe(true)
+            expect(body.comments.length).toBe(10)
+        })
+    })
+    it("responds with an array of article comment objects pagination to the page that is passed",()=>{
+        return request(app)
+        .get("/api/articles/1/comments?p=1")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.comments)).toBe(true)
+            expect(body.comments.length).toBe(1)
+        })
+    })
+    it("responds with an array of article comment objects pagination to the page that is passed with a limit query",()=>{
+        return request(app)
+        .get("/api/articles/1/comments?p=2&limit=5")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.comments)).toBe(true)
+            expect(body.comments.length).toBe(1)
+        })
+    })
+    it("responds with an array of article comment objects pagination to the page that is passed without a limit query",()=>{
+        return request(app)
+        .get("/api/articles/1/comments?p=1")
+        .expect(200)
+        .then(({body})=>{
+            expect(Array.isArray(body.comments)).toBe(true)
+            expect(body.comments.length).toBe(1)
+        })
+    })
+    it("responds with 400 bad request if passed a p query which is not a number",()=>{
+        return request(app)
+        .get("/api/articles/1/comments?p=123NotANumber")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("responds with 400 bad request if passed a limit query which is not a number",()=>{
+        return request(app)
+        .get("/api/articles/1/comments?limit=123NotANumber")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+})

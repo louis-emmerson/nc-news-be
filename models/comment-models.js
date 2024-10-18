@@ -10,11 +10,32 @@ function getCommentCountByID(article_id){
             })
 }
 
-function fetchCommentsByArticleID(article_id){
-    return db.query(`SELECT *
+function fetchCommentsByArticleID(article_id, limit=10, p){
+
+   if(p){
+      if(isNaN(p)){
+          return Promise.reject({status: 400,msg: "Bad Request"})
+      }
+  }
+
+  if(limit){
+      if(isNaN(limit)){
+          return Promise.reject({status: 400,msg: "Bad Request"})
+      }
+  }
+
+  let queryString =`SELECT *
                      FROM comments
                      WHERE article_id = $1
-                     ORDER BY created_at DESC`,[article_id])
+                     ORDER BY created_at DESC`
+
+  queryString += ` LIMIT ${limit}`
+
+  if(p){
+     queryString += ` OFFSET ${p*limit}`
+  }
+
+   return db.query(queryString,[article_id])
             .then(({rows})=>{
                return rows
             })

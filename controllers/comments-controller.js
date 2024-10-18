@@ -4,7 +4,8 @@ const { fetchUser } = require("../models/user-models")
 
 function getCommentsByArticleID(request, response,next){
     const {article_id} = request.params
-    const promises = [fetchCommentsByArticleID(article_id), fetchArticlesByID(article_id)]
+    const {limit, p} = request.query
+    const promises = [fetchCommentsByArticleID(article_id, limit, p), fetchArticlesByID(article_id)]
 
     Promise.all(promises)
     .then((comments)=>{
