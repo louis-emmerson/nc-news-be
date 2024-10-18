@@ -862,3 +862,26 @@ describe("POST /api/topics",()=>{
 
 })
 
+describe("DELETE /api/articles/:article_id",()=>{
+    it("should return a 204 and delete the specified article",()=>{
+        return request(app)
+        .delete("/api/articles/1")
+        .expect(204)
+    })
+    it("should return a 400 error and bad request if passed a none valid id",()=>{
+        return request(app)
+        .delete("/api/articles/not-a-valid-id")
+        .expect(400)
+        .then(({body})=>{
+            expect(body.msg).toBe("Bad Request")
+        })
+    })
+    it("should return a 500 error and not found if passed a a vaild id that doesnt exist",()=>{
+        return request(app)
+            .delete("/api/articles/100")
+            .expect(400)
+            .then(({body})=>{
+                expect(body.msg).toBe("Bad Request")
+            })
+    })
+})

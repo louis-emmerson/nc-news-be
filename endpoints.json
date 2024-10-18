@@ -183,5 +183,11 @@
           "description": "description here"
         }
     }
+  },
+  "DELETE /api/articles/:article_id":{
+    "description": "Deltes an existing article & comments by the article_id",
+    "parameters": ["article_id"],
+    "exampleResponse": {}
+
   }
 }
