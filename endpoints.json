@@ -45,8 +45,8 @@
     }
   },
   "GET /api/articles/:article_id/comments":{
-    "description": "serves an array with the corresponding comments objects",
-    "parameters": ["article_id"],
+    "description": "serves an array with the corresponding comments objects with optional filters and pagination. default limit of 10",
+    "parameters": ["article_id", "p", "limit"],
     "exampleResponse": {
         "comments": [
           {

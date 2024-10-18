@@ -25,7 +25,6 @@ function fetchAllArticles(order = "DESC", sort_by = "created_at", topic, p , lim
 
     const allowedTopicQueries = ["mitch", "cats", "paper", undefined]
 
-    // let queryString = "SELECT author,title,article_id,topic,created_at,votes,article_img_url FROM articles"
     let queryString = "SELECT author,title,article_id,topic,created_at,votes,article_img_url FROM articles"
 
     
