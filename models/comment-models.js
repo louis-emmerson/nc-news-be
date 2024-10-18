@@ -68,12 +68,25 @@ function getCommentByID(comment_id){
 
 function deleteCommentByID(comment_id){
    return db.query(`DELETE FROM comments
-                    WHERE comment_id = $1;`,[comment_id])
+                    WHERE comment_id = $1
+                     `,[comment_id])
       .then((result)=>{
          if(result.rowCount === 0){
             return Promise.reject({status: 400, msg: "Bad Request"})
          }
          return result.rows[0]
+      })
+}
+
+function deleteCommentByArticleID(article_id){
+   return db.query(`DELETE FROM comments
+                    WHERE article_id = $1
+                    RETURNING *`,[article_id])
+      .then((result)=>{
+         if(result.rowCount === 0){
+            return Promise.reject({status: 400, msg: "Bad Request"})
+         }
+         return result.rows
       })
 }
 
@@ -88,4 +101,4 @@ function updateCommentByID(comment_id, votes){
 
 }
 
-module.exports = {getCommentCountByID,fetchCommentsByArticleID, addNewComment,deleteCommentByID, getCommentByID,updateCommentByID}
+module.exports = {getCommentCountByID,fetchCommentsByArticleID, addNewComment,deleteCommentByID, getCommentByID,updateCommentByID, deleteCommentByArticleID}

@@ -1,6 +1,6 @@
 const { response } = require("../app")
 const { topicData } = require("../db/data/test-data")
-const { fetchArticlesByID, fetchAllArticles, updateArticleByID, addNewArticle } = require("../models/article-models")
+const { fetchArticlesByID, fetchAllArticles, updateArticleByID, addNewArticle, deleteArticleByID } = require("../models/article-models")
 const { getCommentCountByID } = require("../models/comment-models")
 
 function getArticleByID(request, response, next){
@@ -65,5 +65,18 @@ function postNewArticle(request,response,next){
     
 }
 
+function deleteArticle(request, response, next){
+    const {article_id} = request.params
+    deleteArticleByID(article_id)
+    .then((result)=>{
+        if(result.rowCount ===1){
+            response.status(204).send()
+        }
+    })
+    .catch((err)=>{
+        next(err)
+    })
+}
 
-module.exports = {getArticleByID, getArticles, patchArticle, postNewArticle}
+
+module.exports = {getArticleByID, getArticles, patchArticle, postNewArticle, deleteArticle}
