@@ -20,8 +20,6 @@ function fetchArticlesByID(article_id){
 }
 
 function fetchAllArticles(order = "DESC", sort_by = "created_at", topic, p=0 , limit=10){
-    console.log(topic)    
-
     const allowedOrderQueries = ["DESC","ASC"]
 
     const allowedSortByQueries = ["title", "created_at", "topic", "author", "votes"]

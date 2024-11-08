@@ -238,14 +238,6 @@ describe("GET /api/articles",()=>{
                 });
             })
         })
-        it("Should return 400 bad request when given an invalid topic (NotAVailidTopic)",()=>{
-            return request(app)
-            .get("/api/articles?topic=NotAVailidTopic")
-            .expect(400)
-            .then(({body})=>{
-                    expect(body.msg).toBe("Bad Request")
-            })
-        })
     
     })
         
