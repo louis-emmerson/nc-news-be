@@ -68,10 +68,9 @@ function postNewArticle(request,response,next){
 function deleteArticle(request, response, next){
     const {article_id} = request.params
     deleteArticleByID(article_id)
-    .then((result)=>{
-        if(result.rowCount ===1){
-            response.status(204).send()
-        }
+    .then(()=>{
+        response.status(204).send()
+                
     })
     .catch((err)=>{
         next(err)
