@@ -873,6 +873,7 @@ describe("DELETE /api/articles/:article_id",()=>{
             .delete("/api/articles/100")
             .expect(400)
             .then(({body})=>{
+                console.log(body)
                 expect(body.msg).toBe("Bad Request")
             })
     })

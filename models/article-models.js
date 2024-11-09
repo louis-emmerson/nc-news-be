@@ -1,6 +1,6 @@
 const { response } = require("../app")
 const db = require("../db/connection")
-const {deleteCommentByArticleID } = require("./comment-models")
+const {deleteCommentByArticleID, fetchCommentsByArticleID } = require("./comment-models")
 
 
 function fetchArticlesByID(article_id){
@@ -97,7 +97,7 @@ function addNewArticle(newArticleObj){
     })
 }
 
-function deleteArticleByID(article_id){
+function deleteArticleByIDsad(article_id){
     return deleteCommentByArticleID(article_id)
     .then(()=>{
         return db.query(`DELETE from articles
@@ -105,5 +105,18 @@ function deleteArticleByID(article_id){
                         RETURNING *`,[article_id])
     })    
 }
+function deleteArticleByID(article_id){
+    return fetchCommentsByArticleID(article_id)
+    .then((results)=>{
+        if(results !== 0){
+            return deleteCommentByArticleID(article_id)
+        }
+    }).then((results)=>{
+        return db.query(`DELETE from articles
+            WHERE article_id = $1
+            RETURNING *`,[article_id])
+    })
+}
+
 
 module.exports = {fetchArticlesByID, fetchAllArticles, updateArticleByID, addNewArticle, deleteArticleByID}
