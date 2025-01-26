@@ -3,7 +3,7 @@
 Welcome to the Northcoders News API! This project is a RESTful API designed to serve as the backend for a news aggregation service. It was created as part of a Digital Skills Bootcamp in Software Engineering provided by Northcoders.
 
 ## Hosted Version
-[Click here](https://nc-news.louis-emmerson.dev/api) to view the hosted version of the project.
+[Click here](https://api-nc-news.louis-emmerson.dev/api/) to view the hosted version of the project.
 
 ## Project Summary
 
